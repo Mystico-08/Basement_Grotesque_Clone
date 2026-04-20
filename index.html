@@ -9,15 +9,19 @@
 <body>
 <nav class="nav">Want the full font? Check out our newly relesed BASEMENT FOUNDRY.</nav>
 <section class="fixed">
-    <div>b.</div>
-    <div>Grotesque 800 ·Grotesque 400 / In Progress·Grotesque 900  In Progress</div>
-    <div id="clock"></div>
-    <div>TWEET AND GET IT FREE</div>
+  <div class="fixed-logo">b.</div>
+  <div class="fixed-prog">
+    <span>Grotesque 800\v1.2</span> · Grotesque 400 / In Progress · Grotesque 900 / In Progress
+  </div>
+  <div class="fixed-clock" id="clock"></div>
+  <a class="fixed-tweet" href="https://twitter.com/basementstudio" target="_blank">
+    TWEET AND GET IT FREE
+  </a>
 </section>
 <section>
     <div class="hero">
-  <h1 class="hero-text outline">BASEMENT</h1>
-  <h1 class="hero-text filled">GROTESQUE</h1>
+  <h1 class="hero-text outline layer" data-speed="1">BASEMENT</h1>
+  <h1 class="hero-text filled layer" data-speed="2">GROTESQUE</h1>
   <div class="Tag">
   <div class="know-more">
     <img src="./assets/labelhero.webp">
@@ -47,6 +51,7 @@ we learn by doing.</p>
 </div>
 </section>
 <section class="Section-3">
+  <svg class="characters__svg "  width="638" height="810" viewBox="0 0 638 810" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: translate(0px, 0px); opacity: 1; visibility: inherit;"><path d="M528.721 68.2758C543.566 77.5248 551.979 95.6945 554.372 120.803C556.765 145.901 553.132 177.835 543.988 214.45C525.702 287.673 485.406 379.5 427.425 472.562C369.443 565.624 304.776 642.267 247.108 690.953C218.272 715.299 191.208 732.635 167.624 741.549C144.031 750.466 124.013 750.923 109.168 741.674C94.3235 732.425 85.9114 714.255 83.5175 689.147C81.1245 664.049 84.758 632.115 93.9019 595.5C112.188 522.277 152.484 430.45 210.465 337.388C268.447 244.326 333.114 167.683 390.782 118.997C419.618 94.6513 446.682 77.3151 470.266 68.4012C493.859 59.4839 513.877 59.0269 528.721 68.2758Z" stroke="white"></path></svg>
     <div class="capital">
         <div>A</div>
         <div>B</div>
@@ -118,6 +123,7 @@ we learn by doing.</p>
         <div>?</div>
         <div>&</div>
     </div>
+    
 </section>
 <section class="Section-4">
   <div class="sec-4">
@@ -128,7 +134,7 @@ we learn by doing.</p>
     </div>
     </div>
     <div class="grid-wrapper">
-  
+ <div id="toast">Copied to the clipboard</div> 
 <div class="grid" id="grid">
 <div class="button">A</div>
 <div class="button">Á</div>
@@ -351,39 +357,56 @@ ALSO HOUSE MANY DECORATIONS.</div>
 </div>
 </section>
 <section class="Section-6">
-<div class="upper-flex">
- <div class="left-upper">aàáâä<br>
- aàáâä<br>
- aàáâä</div>
- <div class="right-upper" >RRRR<br>
-  &nbsp;GG<br>
-  &nbsp;QQ</div>
-</div>
-<div class="bottom">1918-2021<br>
-£ 206.10<br>
-€ 37,00<br>
-</div>
+
+  <div class="sec-6-top">
+
+    <div class="sec-6-left">
+      <p class="sec-6-label">MANY ACCENTS, OBVIOUSLY</p>
+      <div class="sec-6-line">aàáâä</div>
+      <div class="sec-6-line">aàáâä</div>
+      <div class="sec-6-line">aàáâä</div>
+    </div>
+
+    <div class="sec-6-right">
+      <p class="sec-6-label">CAPITAL VARIABLES, BECAUSE, WHY NOT?</p>
+      <div class="sec-6-right-box">
+        <div class="sec-6-line sec-6-line--dark">RRRR</div>
+        <div class="sec-6-line sec-6-line--dark">GG</div>
+        <div class="sec-6-line sec-6-line--dark">QQ</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sec-6-bottom">
+    <p class="sec-6-label">WHO NEEDS NUMBERS?</p>
+    <div class="sec-6-line">1918-2021</div>
+    <div class="sec-6-line">£ 206.10</div>
+    <div class="sec-6-line">€ 37,00</div>
+  </div>
+
 </section>
 <section class="Section-7 animate">
 <div>Try this beauty :)</div>
   <div class="text" id="text">
+    
     We Make Cool Shit That Performs
   </div>
 
 
     
     <div class="control">
-      <span>Font Size</span>
+      <span><span>Font Size</span><span class="value-7" id="sizeValue"></span></span>
       <input type="range" id="size" min="21" max="195" value="108">
     </div>
 
     <div class="control">
-      <span>Tracking</span>
+      <span><span>Tracking</span><span class="value-7 " id="trackingValue"></span></span>
       <input type="range" id="tracking" min="-4" max="4" step="0.1" value="-2">
     </div>
 
     <div class="control">
-      <span>Leading</span>
+      <span><span>Leading</span><span class="value-7" id="leadingValue"></span></span>
       <input type="range" id="leading" min="0.83" max="1.40" step="0.01" value="1.10">
     </div>
 
@@ -391,18 +414,23 @@ ALSO HOUSE MANY DECORATIONS.</div>
 
 </section>
 <section class="Section-8">
-  <div class="bg-img"></div>
-  <div class="poster">
-    <img src="./assets/sec-8 front.webp">
+
+  <div class="sec8-bg">
+    <img src="./assets/sec-8 back.png">
   </div>
-  <div class="text-box">
-    <h3>
-      FORGET MORALITY Moral philosophy is bogus, a mere substitute for God that licenses ugly emotions.
-    </h3>
-    <div class="tags">
-      <p>T002.s5</p>
-      <p>T001.s5</p>
+
+  <div class="sec8-bottom">
+    <div class="sec8-poster">
+      <img src="./assets/sec-8 front.webp">
     </div>
+    <div class="sec8-text">
+      <h3>FORGET MORALITY Moral philosophy is bogus, a mere substitute for God that licenses ugly emotions.</h3>
+      <div class="sec8-tags">
+        <p>T002.s5</p>
+        <p>T001.s5</p>
+      </div>
+    </div>
+  </div>
 
 </section>
 <section class="Section-9">
@@ -413,7 +441,7 @@ ALSO HOUSE MANY DECORATIONS.</div>
     muted
     playsinline
     ></video></div>
-    <div id="sec-9-text">In every Mithraeum the<br> centerpiece was a <br>representation of Mithras killing a sacred<br> bull, an act called the<br> Tauroctony.</div>
+    <div id="sec-9-text">In every Mithraeum the<br> centerpiece was a <br>representation of Mithras killing a sacred<br> bull, an act called the<br> Tauroctony.<br><span>I003.s5</span></div>
     <div><img src="./assets/Sec-9.webp"></div>
     </div>
 </section>
@@ -537,41 +565,35 @@ ALSO HOUSE MANY DECORATIONS.</div>
         </div>
     </div>
 </section>
-<section>
-  <footer class="footer">
+<footer class="footer">
 
   <div class="footer-top">
-    
+
     <div class="footer-left">
-      <div id="playgroud"></div>
+      <div id="playground"></div>
     </div>
 
     <div class="footer-right">
-      <h1>
-        OUR WORK IS SERIOUS,<br>
-        <span>WE ARE NOT.</span>
+      <h1 class="footer-heading">
+        OUR WORK IS<br>SERIOUS,<br><span class="footer-heading-outline">WE ARE NOT.</span>
       </h1>
-
-      <div class="socials">
-        <a href="#">TWITTER ↗</a>
-        <a href="#">DRIBBBLE ↗</a>
-        <a href="#">INSTAGRAM ↗</a>
-        <a href="#">GITHUB ↗</a>
+      <div class="footer-socials">
+        <a href="https://twitter.com/basementstudio" target="_blank">TWITTER ↗</a>
+        <a href="https://dribbble.com/basementstudio" target="_blank">DRIBBBLE ↗</a>
+        <a href="https://www.instagram.com/basementdotstudio/" target="_blank">INSTAGRAM ↗</a>
+        <a href="https://github.com/basementstudio" target="_blank">GITHUB ↗</a>
       </div>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    <div>EULA</div>
-    <div>CONTACT</div>
-    <div class="copyright">
-      © basement.studio LLC 2026 all rights reserved
-    </div>
-  </div>
+  <div class="footer-bottom-item footer-bottom-eula">EULA</div>
+  <div class="footer-bottom-item footer-bottom-contact">CONTACT</div>
+  <div class="footer-bottom-item footer-bottom-copy">© basement.studio LLC 2026 all rights reserved</div>
+</div>
 
 </footer>
-</section>
 <script src="script.js" defer></script>
 </body>
 </html>
