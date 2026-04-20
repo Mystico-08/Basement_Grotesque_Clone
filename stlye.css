@@ -788,21 +788,23 @@ max-width:400px
 
   body { overflow-x: hidden; }
 
-  /* ── NAV ────────────────────────────────────────────── */
-  .fixed {
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    box-sizing: border-box;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 0.5rem 1rem;
-    font-size: 0.6rem;
-  }
+  
+.fixed {
+  flex-wrap: wrap;
+  padding: 0.5rem 1rem;
+  gap: 4px;
+  font-size: 0.55rem;
+}
 
-  /* ── SECTION 1 — HERO ───────────────────────────────── */
+.fixed-prog {
+  display: none;
+}
+
+.fixed-clock {
+  padding: 0 0.5rem;
+}
+
+
   .hero { margin-top: 4rem; }
 
   .hero-text {
@@ -819,7 +821,7 @@ max-width:400px
     font-size: 10px;
   }
 
-  /* ── SECTION 2 ──────────────────────────────────────── */
+
   .Section-2 {
     flex-direction: column;
     padding: 1.5rem;
@@ -846,7 +848,7 @@ max-width:400px
     top: 0;
   }
 
-  /* ── SECTION 3 ──────────────────────────────────────── */
+
   .Section-3 { margin: 3rem 1rem; }
 
   .capital,
@@ -859,7 +861,6 @@ max-width:400px
     display: none;
   }
 
-  /* ── SECTION 4 ──────────────────────────────────────── */
   .sec-4 {
     flex-direction: column;
     margin: 1rem;
@@ -880,7 +881,6 @@ max-width:400px
     padding: 0.5rem;
   }
 
-  /* ── SECTION 5 ──────────────────────────────────────── */
   .sec-5-text {
     font-size: clamp(2rem, 10vw, 4rem);
   }
@@ -913,7 +913,6 @@ max-width:400px
     font-size: 0.95rem;
   }
 
-  /* ── SECTION 6 ──────────────────────────────────────── */
   .Section-6 {
     margin: 1.5rem;
     padding: 1.5rem;
@@ -945,7 +944,6 @@ max-width:400px
     margin-left: 0;
   }
 
-  /* ── SECTION 7 ──────────────────────────────────────── */
   .Section-7 > div:first-child {
     font-size: 1.4rem;
     margin: 1.5rem 1rem;
@@ -966,7 +964,6 @@ max-width:400px
 
   .control span { gap: 0.5rem; }
 
-  /* ── SECTION 8 ──────────────────────────────────────── */
   .sec8-bg { height: 50vw; min-height: 220px; }
 
   .sec8-bottom {
@@ -988,7 +985,6 @@ max-width:400px
 
   .sec8-text h3 { font-size: 1rem; }
 
-  /* ── SECTION 9 ──────────────────────────────────────── */
   .Section-9 { margin-top: 4rem; }
 
   .sec-9 {
@@ -1010,7 +1006,6 @@ max-width:400px
     font-size: 14px;
   }
 
-  /* ── SECTION 10 ─────────────────────────────────────── */
   .Section-10 {
     flex-direction: column;
     align-items: flex-start;
@@ -1030,7 +1025,6 @@ max-width:400px
     width: 100%;
   }
 
-  /* ── SECTION 11 ─────────────────────────────────────── */
   .box { margin: 1rem 0.5rem; }
 
   .main-flex { flex-direction: column; }
@@ -1052,7 +1046,6 @@ max-width:400px
 
   .third-column img { max-width: 100%; }
 
-  /* ── FOOTER ─────────────────────────────────────────── */
   .footer { margin: 1rem 0.5rem; }
 
   .footer-top {
@@ -1097,7 +1090,6 @@ max-width:400px
     padding: 0.8rem 1rem;
   }
 
-  /* ── DISABLE PARALLAX ON MOBILE ─────────────────────── */
   .hero-text,
   .BigA,
   .text-2,
