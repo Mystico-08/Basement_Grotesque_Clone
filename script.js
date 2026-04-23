@@ -108,6 +108,13 @@ function Text() {
   leadingValue.forEach(el => el.textContent = leadingSlider.value);
 }
 
+
+if (window.innerWidth <= 768) {
+  if (sizeSlider)     { sizeSlider.value     = "32";   sizeSlider.min = "16"; sizeSlider.max = "80"; }
+  if (trackingSlider) { trackingSlider.value = "0.4";  }
+  if (leadingSlider)  { leadingSlider.value  = "1.10"; }
+}
+
 sizeSlider?.addEventListener("input", Text);
 trackingSlider?.addEventListener("input", Text);
 leadingSlider?.addEventListener("input", Text);
@@ -116,61 +123,245 @@ leadingSlider?.addEventListener("input", Text);
 Text();
 
 
-const box = document.getElementById("playground");
-const chars = "abcdefghijklmnopqrstuvwxyz123456789";
+(function initPlayground() {
+  const box = document.getElementById("playground");
 
-let physLetters = [];
+  const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const GRAVITY = 1.0;
+  const DAMPEN = 0.2;
+  const FONT_SIZE = 64;
 
-if (box) {
+  let letters = [];
+  let running = true;
+  let lastTime = 0;
+  let rafId;
 
-  function createLetter() {
-    const el = document.createElement("span");
-    el.className = "phys-letter";
-    el.innerText = chars[Math.floor(Math.random() * chars.length)];
+  function boxW() { return box.clientWidth; }
+  function boxH() { return box.clientHeight; }
 
-    const obj = {
-      el,
-      x: Math.random() * (box.clientWidth - 40),
-      y: -50,
-      vy: 0,
-      width: 30,
-      height: 40,
-      rotation: Math.random() * 360
-    };
+  function cols() {
+    return Math.floor(boxW() / FONT_SIZE);
   }
-}
+
+  /* ── stop only when top is filled across width ── */
+  function isFilledTop() {
+    const totalCols = cols();
+    let filled = 0;
+
+    for (let i = 0; i < totalCols; i++) {
+      const x = i * FONT_SIZE;
+
+      const hasTop = letters.some(l =>
+        Math.abs(l.x - x) < 2 && l.y <= 10
+      );
+
+      if (hasTop) filled++;
+    }
+
+    return filled >= totalCols * 0.9;
+  }
+
+  function pickChar() {
+    return CHARS[Math.floor(Math.random() * CHARS.length)];
+  }
+
+  function spawnLetter() {
+    if (isFilledTop()) return;
+
+    const colIndex = Math.floor(Math.random() * cols());
+    const baseX = colIndex * FONT_SIZE;
+
+    const isOutline = Math.random() < 0.5;
+    const rotation = (Math.random() * 80) - 40;
+
+    const el = document.createElement("span");
+    el.className = "phys-letter" + (isOutline ? " outlined" : "");
+    el.textContent = pickChar();
+
+    el.style.cssText = `
+      position: absolute;
+      font-size: ${FONT_SIZE}px;
+      width: ${FONT_SIZE}px;
+      height: ${FONT_SIZE}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+      will-change: transform;
+      transform: rotate(${rotation}deg);
+    `;
+
+    box.appendChild(el);
+
+    letters.push({
+      el,
+      x: baseX,
+      y: -FONT_SIZE,
+      vy: 0,
+      rotation,
+      col: colIndex,
+      settled: false
+    });
+  }
+
+
+  function groundFor(obj) {
+    let floor = boxH() - FONT_SIZE;
+    let highest = floor;
+
+    for (const other of letters) {
+      if (other === obj || !other.settled) continue;
+
+      if (other.col === obj.col) {
+        const candidate = other.y - FONT_SIZE;
+        if (candidate < highest) highest = candidate;
+      }
+    }
+
+    return highest;
+  }
+
+  function loop(ts) {
+    if (!running) return;
+    rafId = requestAnimationFrame(loop);
+
+    
+
+    if (!isFilledTop()) {
+      for (let i = 0; i < 3; i++) {
+        spawnLetter();
+      }
+    }
+
+    for (const obj of letters) {
+      if (obj.settled) continue;
+
+      obj.vy += GRAVITY;
+      obj.y += obj.vy;
+
+      const ground = groundFor(obj);
+
+      if (obj.y >= ground) {
+        obj.y = ground;
+        obj.vy = -obj.vy * DAMPEN;
+
+        if (Math.abs(obj.vy) < 0.8) {
+          obj.vy = 0;
+          obj.settled = true;
+        }
+      }
+
+      obj.el.style.left = obj.x + "px";
+      obj.el.style.top = obj.y + "px";
+    }
+  }
+
+
+  requestAnimationFrame((ts) => {
+    lastTime = ts;
+    rafId = requestAnimationFrame(loop);
+  });
+
+  
+  const vis = new IntersectionObserver(entries => {
+    running = entries[0].isIntersecting;
+
+    if (running) {
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(loop);
+    } else {
+      cancelAnimationFrame(rafId);
+    }
+  }, { threshold: 0.1 });
+
+  vis.observe(box);
+})();
+
 
 window.addEventListener("scroll", function() {
-  var scrollY = window.scrollY;
- 
+  const scrollY = window.scrollY;
 
-  document.querySelector(".hero-text.outline").style.transform = "translateY(" + (-scrollY * 0.08) + "px)";
-  document.querySelector(".hero-text.filled").style.transform = "translateY(" + (-scrollY * 0.18) + "px)";
- 
-
-  document.querySelector(".BigA").style.transform = "translateY(" + (scrollY * 0.05) + "px)";
-  document.querySelector(".text-2").style.transform = "translateY(" + (scrollY * 0.02) + "px)";
- 
- 
-  var leftLines = document.querySelectorAll(".sec-6-left .sec-6-line");
-  leftLines[0].style.transform = "translateY(" + (scrollY * 0.03) + "px)";
-  leftLines[1].style.transform = "translateY(" + (scrollY * 0.04) + "px)";
-  leftLines[2].style.transform = "translateY(" + (scrollY * 0.05) + "px)";
-
- var rightLines = document.querySelectorAll(".sec-6-right-box .sec-6-line");
-  rightLines[0].style.transform = "translateY(" + (scrollY * 0.03) + "px)";
-  rightLines[1].style.transform = "translateY(" + (scrollY * 0.04) + "px)";
-  rightLines[2].style.transform = "translateY(" + (scrollY * 0.05) + "px)";
   
-  var bottomLines = document.querySelectorAll(".sec-6-bottom .sec-6-line");
-  bottomLines[0].style.transform = "translateY(" + (scrollY * 0.03) + "px)";
-  bottomLines[1].style.transform = "translateY(" + (scrollY * 0.04) + "px)";
-  bottomLines[2].style.transform = "translateY(" + (scrollY * 0.05) + "px)";
-  
-  document.querySelector(".sec8-poster").style.transform = "translateY(" + (-scrollY * 0.02) + "px)";
-  document.querySelector(".sec8-text").style.transform = "translateY(" + (-scrollY * 0.01) + "px)";
+  const heroOutline = document.querySelector(".hero-text.outline");
+  const heroFilled  = document.querySelector(".hero-text.filled");
 
-  document.querySelector("#sec-9-text").style.transform = "translateY(" + (-scrollY * 0.02) + "px)";
+  if (heroOutline)
+    heroOutline.style.transform = `translateY(${-scrollY * 0.08}px)`;
+
+  if (heroFilled)
+    heroFilled.style.transform = `translateY(${-scrollY * 0.18}px)`;
+
+
+ 
+  const bigA  = document.querySelector(".BigA");
+  const text2 = document.querySelector(".text-2");
+
+  if (bigA)
+    bigA.style.transform = `translateY(${scrollY * 0.07}px)`;
+
+  if (text2)
+    text2.style.transform = `translateY(${scrollY * 0.02}px)`;
+
+
+ 
+  const sec6 = document.querySelector(".Section-6");
+
+  if (sec6) {
+    const sec6Top = sec6.offsetTop;
+    const sec6H   = sec6.offsetHeight;
+
+    const rel6 = Math.max(
+      0,
+      Math.min(scrollY - sec6Top + window.innerHeight * 0.5, sec6H)
+    );
+
+    const leftLines   = document.querySelectorAll(".sec-6-left .sec-6-line");
+    const rightLines  = document.querySelectorAll(".sec-6-right-box .sec-6-line");
+    const bottomLines = document.querySelectorAll(".sec-6-bottom .sec-6-line");
+
+    const speeds = [0.06, 0.10, 0.14];
+
+    leftLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
+    });
+
+    rightLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
+    });
+
+    bottomLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
+    });
+  }
+
+
+
+  const sec8 = document.querySelector(".Section-8");
+
+  if (sec8) {
+    const sec8Top = sec8.offsetTop;
+    const sec8H   = sec8.offsetHeight;
+
+    const rel8 = Math.max(
+      0,
+      Math.min(scrollY - sec8Top + window.innerHeight * 0.5, sec8H)
+    );
+
+    const poster  = document.querySelector(".sec8-poster");
+    const sec8txt = document.querySelector(".sec8-text");
+
+    if (poster)
+      poster.style.transform = `translateY(${-rel8 * 0.08}px)`;
+
+    if (sec8txt)
+      sec8txt.style.transform = `translateY(${-rel8 * 0.04}px)`;
+  }
+
+
+
+  const sec9txt = document.querySelector("#sec-9-text");
+
+  if (sec9txt)
+    sec9txt.style.transform = `translateY(${scrollY * 0.04}px)`;
 });
-
- 
