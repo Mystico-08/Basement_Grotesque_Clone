@@ -1,357 +1,368 @@
-async function fetchMovies(endpoint) {
-  try {
-    var res = await fetch("https://api.themoviedb.org/3" + endpoint + "?api_key=206e70331573072b79577f43efa23e96");
-    var data = await res.json();
-    return data.results;
-  } catch (err) {
-    console.log("Fetch error:", err);
-    return [];
+history.scrollRestoration = "manual";
+window.onload = function(){
+  window.scrollTo(0, 0);
+};
+
+
+
+function Clock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  document.getElementById('clock').textContent = time;
+}
+Clock();
+setInterval(Clock, 1000);
+
+
+
+window.addEventListener("load", () => {
+  const texts = document.querySelectorAll(".hero-text");
+
+  texts.forEach((el, i) => {
+    setTimeout(() => {
+      el.classList.add("show");
+    }, i * 400);
+  });
+});
+
+const btn = document.getElementById("viewBtn");
+const grid = document.getElementById("grid");
+
+btn.addEventListener("click", () => {
+  grid.classList.add("open");
+  btn.style.display = "none";
+});
+
+
+const buttons = document.querySelectorAll('.button');
+const toast = document.getElementById('toast');
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const text = btn.textContent;
+
+        navigator.clipboard.writeText(text).then(() => {
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1000);
+        });
+    });
+});
+
+
+const elements = document.querySelectorAll('.animate,.Section-7,.section-5');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+      entry.target.style.transitionDelay = '0s';
+    }
+  });
+}, { threshold: 0.2 });
+
+elements.forEach((el) => {
+  el.style.transitionDelay = '0s';
+  observer.observe(el);
+});
+
+
+const capitalLetters = document.querySelectorAll(".capital div");
+
+const capitalObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      capitalLetters.forEach((el, index) => {
+        setTimeout(() => {
+          el.classList.add("show");
+        }, index * 50);
+      });
+
+      capitalObserver.disconnect(); 
+    }
+  });
+}, { threshold: 0.1 });
+
+const capitalSection = document.querySelector(".capital");
+if (capitalSection) capitalObserver.observe(capitalSection);
+
+
+
+const text = document.getElementById("text");
+const sizeSlider = document.getElementById("size");
+const trackingSlider = document.getElementById("tracking");
+const leadingSlider = document.getElementById("leading");
+
+const sizeValue = document.querySelectorAll("#sizeValue");
+const trackingValue = document.querySelectorAll("#trackingValue");
+const leadingValue = document.querySelectorAll("#leadingValue");
+
+function Text() {
+  text.style.fontSize = sizeSlider.value + "px";
+  text.style.letterSpacing = trackingSlider.value + "px";
+  text.style.lineHeight = leadingSlider.value;
+
+  sizeValue.forEach(el => el.textContent = sizeSlider.value + "px");
+  trackingValue.forEach(el => el.textContent = trackingSlider.value + "px");
+  leadingValue.forEach(el => el.textContent = leadingSlider.value);
+}
+
+
+if (window.innerWidth <= 768) {
+  if (sizeSlider)     { sizeSlider.value     = "32";   sizeSlider.min = "16"; sizeSlider.max = "80"; }
+  if (trackingSlider) { trackingSlider.value = "0.4";  }
+  if (leadingSlider)  { leadingSlider.value  = "1.10"; }
+}
+
+sizeSlider?.addEventListener("input", Text);
+trackingSlider?.addEventListener("input", Text);
+leadingSlider?.addEventListener("input", Text);
+
+
+Text();
+
+
+(function initPlayground() {
+  const box = document.getElementById("playground");
+
+  const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const GRAVITY = 1.0;
+  const DAMPEN = 0.2;
+  const FONT_SIZE = 64;
+
+  let letters = [];
+  let running = true;
+  let lastTime = 0;
+  let rafId;
+
+  function boxW() { return box.clientWidth; }
+  function boxH() { return box.clientHeight; }
+
+  function cols() {
+    return Math.floor(boxW() / FONT_SIZE);
   }
-}
 
-function createCard(movie) {
-  var card = document.createElement("div");
-  card.className = "card";
+  /* ── stop only when top is filled across width ── */
+  function isFilledTop() {
+    const totalCols = cols();
+    let filled = 0;
 
-  var imgSrc = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : "";
+    for (let i = 0; i < totalCols; i++) {
+      const x = i * FONT_SIZE;
 
-  card.innerHTML = "<img src='" + imgSrc + "'><h4>" + movie.title + "</h4><p>⭐ " + movie.vote_average.toFixed(1) + "</p>";
+      const hasTop = letters.some(l =>
+        Math.abs(l.x - x) < 2 && l.y <= 10
+      );
 
-  card.addEventListener("click", function() {
-    openModal(movie.id);
-  });
+      if (hasTop) filled++;
+    }
 
-  return card;
-}
-
-function displayMovies(movies, containerId) {
-  var container = document.getElementById(containerId);
-  container.innerHTML = "";
-  movies.forEach(function(movie) {
-    container.appendChild(createCard(movie));
-  });
-}
-
-function getWatchlist() {
-  return JSON.parse(localStorage.getItem("watchlist") || "[]");
-}
-
-function saveWatchlist(list) {
-  localStorage.setItem("watchlist", JSON.stringify(list));
-}
-
-function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites") || "[]");
-}
-
-function saveFavorites(list) {
-  localStorage.setItem("favorites", JSON.stringify(list));
-}
-
-function addWatchlist(id) {
-  var list = getWatchlist();
-  if (!list.includes(id)) {
-    list.push(id);
-    saveWatchlist(list);
-    alert("Added to watchlist");
+    return filled >= totalCols * 0.9;
   }
-  renderWatchlist();
-}
 
-function removeFromWatchlist(id) {
-  var list = getWatchlist().filter(function(item) {
-    return item != id;
-  });
-  saveWatchlist(list);
-  renderWatchlist();
-}
+  function pickChar() {
+    return CHARS[Math.floor(Math.random() * CHARS.length)];
+  }
 
-async function renderWatchlist() {
-  var container = document.getElementById("watchlist");
-  container.innerHTML = "";
-  var list = getWatchlist();
+  function spawnLetter() {
+    if (isFilledTop()) return;
 
-  for (const id of list.slice(0)) {
-    var res = await fetch("https://api.themoviedb.org/3/movie/" + id + "?api_key=206e70331573072b79577f43efa23e96");
-    var movie = await res.json();
-    var card = createCard(movie);
+    const colIndex = Math.floor(Math.random() * cols());
+    const baseX = colIndex * FONT_SIZE;
+
+    const isOutline = Math.random() < 0.5;
+    const rotation = (Math.random() * 80) - 40;
+
+    const el = document.createElement("span");
+    el.className = "phys-letter" + (isOutline ? " outlined" : "");
+    el.textContent = pickChar();
+
+    el.style.cssText = `
+      position: absolute;
+      font-size: ${FONT_SIZE}px;
+      width: ${FONT_SIZE}px;
+      height: ${FONT_SIZE}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+      will-change: transform;
+      transform: rotate(${rotation}deg);
+    `;
+
+    box.appendChild(el);
+
+    letters.push({
+      el,
+      x: baseX,
+      y: -FONT_SIZE,
+      vy: 0,
+      rotation,
+      col: colIndex,
+      settled: false
+    });
+  }
 
 
-    var ratings = JSON.parse(localStorage.getItem("ratings") || "{}");
-    var userRating = ratings[id];
-    if (userRating) {
-      var ratingP = card.querySelector("p");
-      if (ratingP) {
-        ratingP.outerHTML = "<div class='rating-row'><span>⭐ " + movie.vote_average.toFixed(1) + "</span><span class='user-rating-badge'>🎬 " + userRating + "/10</span></div>";
+  function groundFor(obj) {
+    let floor = boxH() - FONT_SIZE;
+    let highest = floor;
+
+    for (const other of letters) {
+      if (other === obj || !other.settled) continue;
+
+      if (other.col === obj.col) {
+        const candidate = other.y - FONT_SIZE;
+        if (candidate < highest) highest = candidate;
       }
     }
 
-    var btn = document.createElement("button");
-    btn.innerText = "Remove";
-    btn.onclick = function() {
-      removeFromWatchlist(movie.id);
-    };
-
-    card.appendChild(btn);
-    container.appendChild(card);
+    return highest;
   }
-}
 
-function addFavorites(id) {
-  var list = getFavorites();
-  if (!list.includes(id)) {
-    list.push(id);
-    saveFavorites(list);
-    alert("Added to favorites");
-  }
-  renderFavorites();
-}
+  function loop(ts) {
+    if (!running) return;
+    rafId = requestAnimationFrame(loop);
 
-function removeFromFavorites(id) {
-  var list = getFavorites().filter(function(item) {
-    return item != id;
-  });
-  saveFavorites(list);
-  renderFavorites();
-}
+    
 
-async function renderFavorites() {
-  var container = document.getElementById("favorites");
-  container.innerHTML = "";
-  var list = getFavorites();
-
-  for (const id of list.slice(0)) {
-    var res = await fetch("https://api.themoviedb.org/3/movie/" + id + "?api_key=206e70331573072b79577f43efa23e96");
-    var movie = await res.json();
-    var card = createCard(movie);
-
-    // Show user rating if exists
-    var ratings = JSON.parse(localStorage.getItem("ratings") || "{}");
-    var userRating = ratings[id];
-    if (userRating) {
-      var ratingP = card.querySelector("p");
-      if (ratingP) {
-        ratingP.outerHTML = "<div class='rating-row'><span>⭐ " + movie.vote_average.toFixed(1) + "</span><span class='user-rating-badge'>🎬 " + userRating + "/10</span></div>";
+    if (!isFilledTop()) {
+      for (let i = 0; i < 3; i++) {
+        spawnLetter();
       }
     }
 
-    var btn = document.createElement("button");
-    btn.innerText = "Remove";
-    btn.onclick = function() {
-      removeFromFavorites(movie.id);
-    };
+    for (const obj of letters) {
+      if (obj.settled) continue;
 
-    card.appendChild(btn);
-    container.appendChild(card);
-  }
-}
-async function openModal(id) {
-  const movieRes = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=206e70331573072b79577f43efa23e96`);
-  const movie = await movieRes.json();
+      obj.vy += GRAVITY;
+      obj.y += obj.vy;
 
-  const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=206e70331573072b79577f43efa23e96`);
-  const castData = await creditsRes.json();
+      const ground = groundFor(obj);
 
-  const castList = castData.cast.slice(0, 5).map(a => `<li>${a.name}</li>`).join("");
-  const genreText = movie.genres.map(g => g.name).join(", ");
+      if (obj.y >= ground) {
+        obj.y = ground;
+        obj.vy = -obj.vy * DAMPEN;
 
-  const modal = document.getElementById("modal");
-  if (!modal) return;
+        if (Math.abs(obj.vy) < 0.8) {
+          obj.vy = 0;
+          obj.settled = true;
+        }
+      }
 
-  modal.innerHTML = `
-    <div class='modal-content'>
-      <h2>${movie.title}</h2>
-      <p><b>Genres:</b> ${genreText}</p>
-      <p>${movie.overview}</p>
-      <h4>Cast:</h4><ul>${castList}</ul>
-    </div>`;
-
-  const content = modal.querySelector(".modal-content");
-
-  const favBtn = document.createElement("button");
-  favBtn.innerText = "Favorite";
-  favBtn.onclick = () => addFavorites(id);
-
-  const watchBtn = document.createElement("button");
-  watchBtn.innerText = "Watchlist";
-  watchBtn.onclick = () => addWatchlist(id);
-
-
-const rateBtn = document.createElement("button");
-rateBtn.innerText = "Rate";
-
-
-const ratePopup = document.createElement("div");
-ratePopup.style.display = "none"; 
-
-ratePopup.innerHTML = `
-  <div style="
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #111;
-    padding: 20px;
-    border-radius: 10px;
-    z-index: 1000;
-    text-align: center;
-  ">
-    <h4 style="margin-bottom:10px;">Rate this movie</h4>
-    <input type="number" min="1" max="10" step="1" placeholder="1-10"
-      style="width:60px; padding:6px; border-radius:5px; border:none;"
-      class="rateInput"
-    >
-    <br><br>
-    <button class="submitRate">Submit</button>
-    <button class="cancelRate">Cancel</button>
-    <p class="rateError" style="color:red; margin-top:10px;"></p>
-  </div>
-`;
-
-
-document.body.appendChild(ratePopup);
-
-
-rateBtn.onclick = (e) => {
-  e.stopPropagation();
-  ratePopup.style.display = "block";
-};
-
-
-const input = ratePopup.querySelector(".rateInput");
-const submitBtn = ratePopup.querySelector(".submitRate");
-const cancelBtn = ratePopup.querySelector(".cancelRate");
-const errorP = ratePopup.querySelector(".rateError");
-
-submitBtn.onclick = () => {
-  const num = Number(input.value);
-
-  if (!input.value || num < 1 || num > 10 || !Number.isInteger(num)) {
-    errorP.innerText = "Enter a whole number (1–10)";
-    return;
+      obj.el.style.left = obj.x + "px";
+      obj.el.style.top = obj.y + "px";
+    }
   }
 
-  const ratings = JSON.parse(localStorage.getItem("ratings") || "{}");
-  ratings[id] = num;
-  localStorage.setItem("ratings", JSON.stringify(ratings));
 
-  errorP.style.color = "lightgreen";
-  errorP.innerText = "Saved: " + num + "/10";
+  requestAnimationFrame((ts) => {
+    lastTime = ts;
+    rafId = requestAnimationFrame(loop);
+  });
 
-  input.value = "";
-};
-
-cancelBtn.onclick = () => {
-  ratePopup.style.display = "none";
-  input.value = "";
-  errorP.innerText = "";
-  errorP.style.color = "red";
-};
   
+  const vis = new IntersectionObserver(entries => {
+    running = entries[0].isIntersecting;
 
-  const closeBtn = document.createElement("button");
-  closeBtn.innerText = "Close";
-  closeBtn.onclick = closeModal;
-
-  content.append(favBtn, watchBtn, rateBtn, closeBtn);
-
-  modal.classList.remove("hidden");
-  document.body.classList.add("modal-open");
-}
-
-function closeModal(){
-  var modal = document.getElementById("modal");
-  if(modal) modal.classList.add("hidden");
-  document.body.classList.remove("modal-open");
-}
-
-var modal = document.getElementById("modal");
-if(modal){
-  modal.addEventListener("click", function(e){
-    if(e.target === modal) closeModal();
-  });
-}
-
-var searchInput = document.getElementById("searchInput");
-var dropdown = document.getElementById("searchDropdown");
-
-searchInput.addEventListener("input", async function() {
-  var query = searchInput.value.trim();
-  if (!query) {
-    dropdown.classList.add("hidden");
-    dropdown.innerHTML = "";
-    document.body.classList.remove("dropdown-open");
-    return;
-  }
-
-  var movieRes = await fetch("https://api.themoviedb.org/3/search/movie?api_key=206e70331573072b79577f43efa23e96&query=" + query);
-  var movieData = await movieRes.json();
-
-  var personRes = await fetch("https://api.themoviedb.org/3/search/person?api_key=206e70331573072b79577f43efa23e96&query=" + query);
-  var personData = await personRes.json();
-
-  var actorMovies = [];
-
-  for (const person of personData.results.slice(0, 3)) {
-    var creditRes = await fetch("https://api.themoviedb.org/3/person/" + person.id + "/movie_credits?api_key=206e70331573072b79577f43efa23e96");
-    var creditData = await creditRes.json();
-    creditData.cast.forEach(function(m) {
-      actorMovies.push(m);
-    });
-  }
-
-  var allMovies = movieData.results.concat(actorMovies);
-  var unique = [];
-
-  allMovies.forEach(function(movie) {
-    if (!unique.some(function(m) { return m.id === movie.id; })) {
-      unique.push(movie);
+    if (running) {
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(loop);
+    } else {
+      cancelAnimationFrame(rafId);
     }
-  });
+  }, { threshold: 0.1 });
 
-  dropdown.innerHTML = "";
+  vis.observe(box);
+})();
 
-  unique.slice(0, 6).forEach(function(movie) {
-    var div = document.createElement("div");
-    div.className = "dropdown-card";
 
-    var imgSrc = movie.poster_path ? "https://image.tmdb.org/t/p/w500" + movie.poster_path : "https://via.placeholder.com/50x75?text=No+Image";
+window.addEventListener("scroll", function() {
+  const scrollY = window.scrollY;
 
-    div.innerHTML = "<img src='" + imgSrc + "'><div class='dropdown-info'><div class='dropdown-title'>" + movie.title + "</div><div class='dropdown-rating'>⭐ " + movie.vote_average + "</div></div>";
+  
+  const heroOutline = document.querySelector(".hero-text.outline");
+  const heroFilled  = document.querySelector(".hero-text.filled");
 
-    div.addEventListener("click", function() {
-      openModal(movie.id);
-      dropdown.classList.add("hidden");
-      document.body.classList.remove("dropdown-open");
-      searchInput.value = movie.title;
+  if (heroOutline)
+    heroOutline.style.transform = `translateY(${-scrollY * 0.08}px)`;
+
+  if (heroFilled)
+    heroFilled.style.transform = `translateY(${-scrollY * 0.18}px)`;
+
+
+ 
+  const bigA  = document.querySelector(".BigA");
+  const text2 = document.querySelector(".text-2");
+
+  if (bigA)
+    bigA.style.transform = `translateY(${scrollY * 0.07}px)`;
+
+  if (text2)
+    text2.style.transform = `translateY(${scrollY * 0.02}px)`;
+
+
+ 
+  const sec6 = document.querySelector(".Section-6");
+
+  if (sec6) {
+    const sec6Top = sec6.offsetTop;
+    const sec6H   = sec6.offsetHeight;
+
+    const rel6 = Math.max(
+      0,
+      Math.min(scrollY - sec6Top + window.innerHeight * 0.5, sec6H)
+    );
+
+    const leftLines   = document.querySelectorAll(".sec-6-left .sec-6-line");
+    const rightLines  = document.querySelectorAll(".sec-6-right-box .sec-6-line");
+    const bottomLines = document.querySelectorAll(".sec-6-bottom .sec-6-line");
+
+    const speeds = [0.06, 0.10, 0.14];
+
+    leftLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
     });
 
-    dropdown.appendChild(div);
-  });
+    rightLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
+    });
 
-  dropdown.classList.remove("hidden");
-  document.body.classList.add("dropdown-open");
-});
-
-document.addEventListener("click", function(e) {
-  if (!e.target.closest(".search-container")) {
-    dropdown.classList.add("hidden");
-    document.body.classList.remove("dropdown-open");
+    bottomLines.forEach((ln, i) => {
+      ln.style.transform = `translateY(${rel6 * (speeds[i] || 0.06)}px)`;
+    });
   }
+
+
+
+  const sec8 = document.querySelector(".Section-8");
+
+  if (sec8) {
+    const sec8Top = sec8.offsetTop;
+    const sec8H   = sec8.offsetHeight;
+
+    const rel8 = Math.max(
+      0,
+      Math.min(scrollY - sec8Top + window.innerHeight * 0.5, sec8H)
+    );
+
+    const poster  = document.querySelector(".sec8-poster");
+    const sec8txt = document.querySelector(".sec8-text");
+
+    if (poster)
+      poster.style.transform = `translateY(${-rel8 * 0.08}px)`;
+
+    if (sec8txt)
+      sec8txt.style.transform = `translateY(${-rel8 * 0.04}px)`;
+  }
+
+
+
+  const sec9txt = document.querySelector("#sec-9-text");
+
+  if (sec9txt)
+    sec9txt.style.transform = `translateY(${scrollY * 0.04}px)`;
 });
-
-async function loadHome() {
-  popular = await fetchMovies("/movie/popular");
-  displayMovies(popular, "popular");
-
-  topRated = await fetchMovies("/movie/top_rated");
-  displayMovies(topRated, "topRated");
-
-  latest = await fetchMovies("/movie/now_playing");
-  displayMovies(latest, "latest");
-
-  renderWatchlist();
-  renderFavorites();
-}
-
-loadHome();
