@@ -1,0 +1,235 @@
+* {
+  margin: 0;
+  font-family: Arial;
+}
+
+body {
+  background: #111;
+  color: white;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #1a1a1a;
+}
+-webki
+
+input {
+  padding: 10px;
+  width: 300px;
+  border-radius: 10px;
+  border: none;
+}
+
+section {
+  padding: 20px;
+}
+
+.card {
+  cursor: pointer;
+  transition: 0.3s;
+  width: 150px;
+  flex: 0 0 auto;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  border-radius: 10px;
+}
+
+body.dropdown-open .card:hover {
+  transform: none;
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+
+  border-radius: 10px;
+}
+
+.movie-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px;
+  overflow-y: hidden;
+}
+
+.movie-row::-webkit-scrollbar {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(48, 47, 47, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #291515;
+  padding: 20px;
+  width: 600px;
+  border-radius: 8px;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+}
+
+.modal-content ul {
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-content button {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+button {
+  margin: 5px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+}
+
+
+.search-container {
+  position: relative;
+  width: 80%;
+  margin: 20px auto;
+}
+
+#searchInput {
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #1e1e1e;
+  border-radius: 10px;
+  margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdown-card {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+.dropdown-card:hover {
+  background: #2a2a2a;
+}
+
+.dropdown-card img {
+  width: 50px;
+  height: 75px;
+}
+
+.TMDB img{
+  height:auto;
+  width:500px;
+}
+
+.rating-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.user-rating-badge {
+  color: white;
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-weight: bold;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 12px 16px;
+  }
+ 
+  header h1 {
+    font-size: 1.2rem;
+  }
+ 
+  .search-container {
+    width: 95%;
+    margin: 12px auto;
+  }
+ 
+  section {
+    padding: 12px;
+  }
+ 
+  section h2 {
+    font-size: 1rem;
+  }
+ 
+  .card {
+    width: 110px;
+  }
+ 
+  .card img {
+    height: 160px;
+  }
+ 
+  .card h4 {
+    font-size: 0.75rem;
+  }
+ 
+  .card p {
+    font-size: 0.7rem;
+  }
+ 
+  .movie-row {
+    gap: 10px;
+  }
+ 
+  .modal-content {
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    font-size: 0.9rem;
+  }
+ 
+  .TMDB img {
+    width: 180px;
+  }
+}
