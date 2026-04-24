@@ -3,8 +3,10 @@
     font-family: "Basement";
 }
 body{
-    background-color:black ;
+    background-color:black;
     margin: 0;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 @font-face {
@@ -29,7 +31,7 @@ body{
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  top: 5%;
+  top: 10%;
   left:10%;
   width: 80%;
   box-sizing: border-box;
@@ -91,12 +93,6 @@ body{
   text-align: center;
 }
 
-.hero-text.show {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 1s ease; 
-}
-
 .hero-text.outline{
   color: transparent;
   -webkit-text-stroke: 2px white;
@@ -106,6 +102,12 @@ body{
   position: relative;
   color: white;
   top:0
+}
+
+.hero-text.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s ease;
 }
 
 .Tag {
@@ -393,9 +395,10 @@ body{
 
 .Section-6 {
   background-color: #101010;
-  margin: 4rem;
-  padding: 3rem;
+  margin: clamp(1rem, 4vw, 4rem);
+  padding: clamp(1rem, 3vw, 3rem);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .sec-6-left {
@@ -602,47 +605,81 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 
-.Section-9{
+.Section-9 {
   margin-top: 18rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-.Section-9 video{
-  max-width: 500px;
-}
-.sec-9{
+
+.sec-9 {
   display: flex;
-  gap:100px;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 100px);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 2rem;
 }
-.sec-9 div img{
-max-width: 500px;
+
+.sec-9 > div {
+  flex: 1 1 0;
+  min-width: 0;
 }
-#sec-9-text{
-align-self: center;
-margin-top: 40%;
-margin-left: -10%;
-font-size: 20px;
-font-weight: bolder;
+
+.Section-9 video {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+}
+
+.sec-9 div img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+}
+
+#sec-9-text {
+  align-self: center;
+  margin-top: 40%;
+  margin-left: 0;
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: bolder;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 
-.Section-10{
+.Section-10 {
   display: flex;
   justify-content: space-between;
   margin: 3rem;
-  font-size: 25px;
+  font-size: clamp(16px, 2vw, 25px);
   align-items: flex-end;
-}
-.sec-10-flex {
-  display: flex;
-  gap:5rem;
-  align-items: flex-end;
-}
-.sec-10-flex img{
-max-width:400px
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.box{
+.sec-10-flex {
+  display: flex;
+  gap: clamp(1rem, 4vw, 5rem);
+  align-items: flex-end;
+}
+
+.sec-10-flex img {
+  max-width: min(400px, 35vw);
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.box {
   border: 1px solid white;
-  margin:3rem;
+  margin: clamp(1rem, 3vw, 3rem);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .main-flex{
   display:flex;
@@ -683,7 +720,9 @@ max-width:400px
 
 .footer {
   border: 1px solid white;
-  margin: 3rem;
+  margin: clamp(1rem, 3vw, 3rem);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .footer-top {
@@ -795,6 +834,17 @@ max-width:400px
   color: transparent;
   -webkit-text-stroke: 1.5px white;
 }
+/* Hide third column (TWEETS) when there isn't enough room for all three columns */
+@media (max-width: 900px) {
+  .third-column {
+    display: none;
+  }
+
+  .second-column {
+    border-left: 1px solid white; /* keep border since it's now the last visible column */
+  }
+}
+
 @media (max-width: 768px) {
 
 
@@ -1129,5 +1179,5 @@ max-width:400px
 .sec8-poster,
 .sec8-text,
 #sec-9-text {
-  transition-property: opacity;  
+  transition-property: opacity;
 }

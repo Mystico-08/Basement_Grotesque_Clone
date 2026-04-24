@@ -58,13 +58,11 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('show');
-      entry.target.style.transitionDelay = '0s';
     }
   });
 }, { threshold: 0.2 });
 
 elements.forEach((el) => {
-  el.style.transitionDelay = '0s';
   observer.observe(el);
 });
 
