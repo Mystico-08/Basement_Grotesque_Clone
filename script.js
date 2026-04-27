@@ -66,6 +66,30 @@ elements.forEach((el) => {
   observer.observe(el);
 });
 
+/* ── Fade-up: slides up + fades in (non-parallax sections) ── */
+const fadeUpEls = document.querySelectorAll('.fade-up');
+const fadeUpObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+      fadeUpObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+fadeUpEls.forEach(el => fadeUpObserver.observe(el));
+
+/* ── Fade-in: opacity only — parallax transform stays free ── */
+const fadeInEls = document.querySelectorAll('.fade-in');
+const fadeInObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+      fadeInObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+fadeInEls.forEach(el => fadeInObserver.observe(el));
+
 
 const capitalLetters = document.querySelectorAll(".capital div");
 
@@ -142,7 +166,7 @@ Text();
     return Math.floor(boxW() / FONT_SIZE);
   }
 
-  /* ── stop only when top is filled across width ── */
+
   function isFilledTop() {
     const totalCols = cols();
     let filled = 0;
@@ -279,6 +303,7 @@ Text();
 
 
 window.addEventListener("scroll", function() {
+  if (window.innerWidth <= 768) return;
   const scrollY = window.scrollY;
 
   
@@ -296,8 +321,10 @@ window.addEventListener("scroll", function() {
   const bigA  = document.querySelector(".BigA");
   const text2 = document.querySelector(".text-2");
 
-  if (bigA)
-    bigA.style.transform = `translateY(${scrollY * 0.07}px)`;
+  if (bigA) {
+    bigA.style.setProperty("--before-y", `${scrollY * 0.01}px`);
+    bigA.style.setProperty("--after-y",  `${scrollY * 0.03}px`);
+  }
 
   if (text2)
     text2.style.transform = `translateY(${scrollY * 0.02}px)`;
@@ -358,9 +385,24 @@ window.addEventListener("scroll", function() {
   }
 
 
+const sec9 = document.querySelector(".Section-9");
 
-  const sec9txt = document.querySelector("#sec-9-text");
+if (sec9) {
+  const sec9Top = sec9.offsetTop;
+  const sec9H   = sec9.offsetHeight;
 
-  if (sec9txt)
-    sec9txt.style.transform = `translateY(${scrollY * 0.04}px)`;
+  const rel9 = Math.max(
+    0,
+    Math.min(scrollY - sec9Top + window.innerHeight * 0.5, sec9H)
+  );
+
+  const main = document.querySelector(".main-text");
+  const sub  = document.querySelector(".sub-text");
+
+  if (main)
+    main.style.transform = `translateY(${-rel9 * 0.05}px)`; 
+
+  if (sub)
+    sub.style.transform = `translateY(${-rel9 * 0.12}px)`; 
+}
 });

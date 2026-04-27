@@ -1,6 +1,10 @@
 *{
     color:white;
     font-family: "Basement";
+    
+}
+html {
+  overflow-x: hidden;
 }
 body{
     background-color:black;
@@ -31,7 +35,7 @@ body{
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  top: 10%;
+  top: 5%;
   left:10%;
   width: 80%;
   box-sizing: border-box;
@@ -39,7 +43,7 @@ body{
   padding: 0.6rem 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 1rem;
-  ;
+  
 }
 
 .fixed-logo {
@@ -131,12 +135,11 @@ body{
 .know-more .text-1 {
   font-family: 'Basement';
   position: absolute;
-  width:400px;
+  width: min(400px, 80vw);
   top: 50%;              
   z-index: 1;
   color: white;
   font-size: 15px;
-  
 }
 
 /*Section-2*/
@@ -171,19 +174,30 @@ body{
 
 .BigA {
   position: relative;  
-  font-size: 400px;
+  font-size: clamp(180px, 30vw, 400px);
   font-weight: bold;
   top:10%;
-  
 }
-.BigA::before {
+.BigA {
+  position: relative;
+}
+
+.BigA::before,
+.BigA::after {
   content: "Ab";
   position: absolute;
   top: 0;
   left: 0;
   color: transparent;
   -webkit-text-stroke: 2px white;
-  transform: translate(-20px, -20px);
+}
+
+.BigA::before {
+  transform: translate(-20px, -20px) translateY(var(--before-y, 0px));
+}
+
+.BigA::after {
+  transform: translate(-40px, -40px) translateY(var(--after-y, 0px));
 }
 
 .animate {
@@ -199,7 +213,7 @@ body{
 }
 
 .Section-3{
-  margin: 8rem;
+  margin: clamp(2rem, 6vw, 8rem);
   position: relative;
 }
 .capital{
@@ -348,17 +362,17 @@ body{
 .sec-5-bottom {
   display: flex;
   align-items: flex-start; 
-  gap: 100px; 
+  gap: clamp(1rem, 6vw, 100px); 
   justify-content: center;
 }
 
 .sec-5-bottom-img {
   display: flex;
   align-items: flex-start;
-  gap: 10rem;          
+  gap: clamp(1rem, 6vw, 10rem);
   background-color: rgb(16,16,16);
   width: fit-content;
-  padding: 5px;       
+  padding: 5px;
 }
 
 
@@ -406,6 +420,9 @@ body{
   flex: 1;
   min-height: 600px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sec-6-right-box {
@@ -482,19 +499,17 @@ body{
   display: flex;
   justify-content: flex-start;
   text-align: center;
-  width: 85%;          
-  max-width: 85%;      
-  margin: 2rem auto;  
+  width: 85%;
+  max-width: 85%;
+  margin: 2rem auto;
   padding: 4rem;
   transition: font-size 0.2s ease, letter-spacing 0.2s ease, line-height 0.2s ease;
   background-color: #101010;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  min-height: 300px;
+  align-items: center;
 }
-.text span{
-  font-size: 1rem;
-  text-align: start;
-  margin-left: 1rem;
-}
+
 .control {
   font-size: 20px;
 margin-top: 3rem;
@@ -507,7 +522,7 @@ margin-bottom: 3rem;
 
 .control span {
   display: flex;
-  gap: 10rem;
+  gap: clamp(1rem, 6vw, 10rem);
 }
 
 .value-7{
@@ -643,12 +658,12 @@ input[type="range"]::-webkit-slider-thumb {
 
 #sec-9-text {
   align-self: center;
-  margin-top: 40%;
+  
   margin-left: 0;
   font-size: clamp(14px, 1.5vw, 20px);
   font-weight: bolder;
   flex: 0 1 auto;
-  min-width: 0;
+  
 }
 
 
@@ -738,7 +753,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .second-column-flex img {
-  width: clamp(10px, 1.8vw, 20px);
+  width: clamp(10px, 3vw, 50px);
   height: auto;
 }
 
@@ -902,10 +917,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 
-  .hero { margin-top: 4rem; }
+  .hero { margin-top: 5rem; }
 
   .hero-text {
-    font-size: clamp(48px, 16vw, 90px);
+    font-size: clamp(48px, 12vw, 90px);
     line-height: 0.85;
   }
 
@@ -936,17 +951,21 @@ input[type="range"]::-webkit-slider-thumb {
   .text-2 {
     width: 100%;
     order: 2;
+    margin-top:2rem;
   }
 
   .text-2 p { font-size: 14px; }
 
   .BigA {
     font-size: clamp(80px, 35vw, 180px);
-    top: 0;
+    margin-top: 3rem;
   }
 
 
-  .Section-3 { margin: 3rem 1rem; }
+  .Section-3 
+  { 
+    margin: 3rem 1rem; 
+  }
 
   .capital,
   .small,
@@ -980,6 +999,8 @@ input[type="range"]::-webkit-slider-thumb {
 
   .sec-5-text {
     font-size: clamp(2rem, 10vw, 4rem);
+    text-align: center;
+
   }
 
   .sign { font-size: 2.5rem; }
@@ -987,6 +1008,8 @@ input[type="range"]::-webkit-slider-thumb {
   .text-middle {
     font-size: 1rem;
     margin: 1.5rem 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
   }
 
   .sec-5-bottom {
@@ -994,6 +1017,7 @@ input[type="range"]::-webkit-slider-thumb {
     align-items: center;
     gap: 1.5rem;
     padding: 0 1rem;
+    margin-top: 3rem;
   }
 
   .sec-5-bottom-img { gap: 1.5rem; }
@@ -1049,9 +1073,10 @@ input[type="range"]::-webkit-slider-thumb {
   .text {
     width: 92%;
     padding: 1.5rem;
-    font-size: 32px !important;   
-    letter-spacing: 0.4px !important;
-    line-height: 1.1 !important;
+    font-size: 32px;
+    letter-spacing: 0.4px;
+    line-height: 1.1;
+    min-height: 220px;
   }
 
   .control {
@@ -1137,15 +1162,10 @@ input[type="range"]::-webkit-slider-thumb {
 
   .second-column,
   .third-column {
-    border-left: none;
-    border-top: 1px solid white;
+    display: none;
   }
 
-  .first-column,
-  .second-column,
-  .third-column { padding: 1rem; }
-
-  .third-column img { max-width: 100%; }
+  .first-column { padding: 1rem; }
 
   .footer { margin: 1rem 0.5rem; }
 
